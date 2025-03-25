@@ -20,25 +20,30 @@ public class JwtTokenUtil {
 
     public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.jwtParser = Jwts.parser().setSigningKey(key).build(); // 🔹 CORREGIDO
+        this.jwtParser = Jwts.parser().setSigningKey(key).build();
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(key, SignatureAlgorithm.HS256) // 🔹 CORREGIDO
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
-        return jwtParser.parseClaimsJws(token).getBody().getSubject(); // 🔹 CORREGIDO
+    public String getEmailFromToken(String token) {
+        return jwtParser.parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getRoleFromToken(String token) {
+        return jwtParser.parseClaimsJws(token).getBody().get("role", String.class);
     }
 
     public boolean validateToken(String token) {
         try {
-            jwtParser.parseClaimsJws(token); // 🔹 CORREGIDO
+            jwtParser.parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;

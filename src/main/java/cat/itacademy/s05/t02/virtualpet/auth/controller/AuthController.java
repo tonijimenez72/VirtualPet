@@ -3,15 +3,13 @@ package cat.itacademy.s05.t02.virtualpet.auth.controller;
 import cat.itacademy.s05.t02.virtualpet.auth.dto.AuthResponse;
 import cat.itacademy.s05.t02.virtualpet.auth.dto.LoginRequest;
 import cat.itacademy.s05.t02.virtualpet.auth.dto.RegisterRequest;
-import cat.itacademy.s05.t02.virtualpet.auth.model.User;
 import cat.itacademy.s05.t02.virtualpet.auth.service.impl.AuthServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,25 +18,28 @@ public class AuthController {
 
     private final AuthServiceImpl authService;
 
+    @Operation(
+            summary = "Register a new user",
+            description = "Creates a new user with an email, password and optional role. Returns a JWT token."
+    )
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
+    @Operation(
+            summary = "Authenticate user",
+            description = "Logs in the user with email and password. Returns a JWT token if successful."
+    )
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(authService.getAllUsers());
-    }
-
-    @GetMapping("/users/{email}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
-        Optional<User> user = authService.getUserByEmail(email);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping("/logout")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
+    @Operation(summary = "Logout user", description = "Invalidates the token client-side. Client should delete the token manually.")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logout successful. Please remove the token on the client side.");
     }
 }

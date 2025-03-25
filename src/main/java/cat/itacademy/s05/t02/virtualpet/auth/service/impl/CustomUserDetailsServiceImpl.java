@@ -1,7 +1,8 @@
 package cat.itacademy.s05.t02.virtualpet.auth.service.impl;
 
-import cat.itacademy.s05.t02.virtualpet.auth.model.User;
-import cat.itacademy.s05.t02.virtualpet.auth.repository.UserRepository;
+
+import cat.itacademy.s05.t02.virtualpet.model.User;
+import cat.itacademy.s05.t02.virtualpet.repository.UserRepository;
 import cat.itacademy.s05.t02.virtualpet.auth.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

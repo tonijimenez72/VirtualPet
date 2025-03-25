@@ -1,6 +1,6 @@
-package cat.itacademy.s05.t02.virtualpet.auth.repository;
+package cat.itacademy.s05.t02.virtualpet.repository;
 
-import cat.itacademy.s05.t02.virtualpet.auth.model.User;
+import cat.itacademy.s05.t02.virtualpet.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

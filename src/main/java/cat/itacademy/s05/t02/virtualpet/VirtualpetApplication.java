@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class VirtualpetApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(VirtualpetApplication.class, args);
 	}
-
 }
